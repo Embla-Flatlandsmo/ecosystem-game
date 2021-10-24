@@ -43,14 +43,15 @@ public class HexGrid : MonoBehaviour
         position.y = 0f;
         position.z = z * (HexMetrics.outerRadius * 1.5f);
 
+        HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
+        cell.transform.SetParent(transform, false);
+        cell.transform.localPosition = position;
+        cell.coordinate = new Coord (x, z);
+
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.SetParent(gridCanvas.transform, false);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z-HexMetrics.innerRadius*0.5f);
-        label.text = "x=" + x.ToString() + "\nz=" + z.ToString();
-
-        HexCell cell = cells[i] = Instantiate<HexCell>(cellPrefab);
-        cell.transform.SetParent(transform, false);
-        cell.transform.localPosition = position;    
+        label.text = cell.coordinate.ToStringOnSeparateLines();
     }
 
 

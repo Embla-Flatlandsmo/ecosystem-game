@@ -17,7 +17,7 @@ public class HexMesh : MonoBehaviour
     }
 
 
-    void Triangulate(HexCell[] cells)
+    public void Triangulate(HexCell[] cells)
     {
         hexMesh.Clear();
         vertices.Clear();
@@ -34,7 +34,26 @@ public class HexMesh : MonoBehaviour
 
     void Triangulate(HexCell cell)
     {
-        //TODO
+        Vector3 center = cell.transform.localPosition;
+        for (int i = 0; i < 6; i++)
+        {
+            AddTriangle(
+                center,
+                center + HexMetrics.corners[i],
+                center + HexMetrics.corners[i+1]);
+        }
+
+    }
+
+    void AddTriangle (Vector3 v1, Vector3 v2, Vector3 v3)
+    {
+        int vertexIndex = vertices.Count;
+        vertices.Add(v1);
+        vertices.Add(v2);
+        vertices.Add(v3);
+        triangles.Add(vertexIndex);
+        triangles.Add(vertexIndex + 1);
+        triangles.Add(vertexIndex + 2);
     }
 
     // Update is called once per frame
