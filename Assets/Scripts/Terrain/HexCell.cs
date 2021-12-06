@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class HexCell : MonoBehaviour
 {
-    public Coord coordinate;
+    public HexCoordinates coordinates;
+    public Color color;
     // Start is called before the first frame update
     void Start()
     {
