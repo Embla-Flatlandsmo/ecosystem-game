@@ -13,6 +13,8 @@ public static class HexMetrics
 
 	public const float elevationStep = 5f;
 
+	public const int chunkSizeX = 5, chunkSizeZ = 5;
+
 	static Vector3[] corners = {
 		// This hexagon is orientated with point at the top
 		new Vector3(0f, 0f, outerRadius),

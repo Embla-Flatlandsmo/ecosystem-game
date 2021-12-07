@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1615778451300850597}
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 0}
 --- !u!23 &2313583555651715005
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -113,7 +113,8 @@ MonoBehaviour:
   coordinates:
     x: 0
     z: 0
-  color: {r: 0, g: 0, b: 0, a: 0}
+  chunk: {fileID: 0}
+  uiRect: {fileID: 0}
   neighbors:
   - {fileID: 0}
   - {fileID: 0}

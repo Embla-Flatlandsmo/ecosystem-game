@@ -61,6 +61,7 @@
     <Compile Include="Assets\Scripts\Terrain\HexDirection.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexMetrics.cs" />
     <Compile Include="Assets\Scenes\SampleScene\SearchingAgent.cs" />
+    <Compile Include="Assets\Scripts\Terrain\HexGridChunk.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexCell.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexGrid.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexCoordinates.cs" />

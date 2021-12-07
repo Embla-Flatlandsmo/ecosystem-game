@@ -316,6 +316,7 @@
 "Assets/Scripts/Terrain/HexCoordinates.cs"
 "Assets/Scripts/Terrain/HexDirection.cs"
 "Assets/Scripts/Terrain/HexGrid.cs"
+"Assets/Scripts/Terrain/HexGridChunk.cs"
 "Assets/Scripts/Terrain/HexMapEditor.cs"
 "Assets/Scripts/Terrain/HexMesh.cs"
 "Assets/Scripts/Terrain/HexMetrics.cs"
