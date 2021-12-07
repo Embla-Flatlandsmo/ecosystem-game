@@ -41,29 +41,15 @@ public class HexGrid : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            HandleInput();
-        }
     }
 
-    void HandleInput()
-    {
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
-        {
-            TouchCell(hit.point);
-        }
-    }
-
-    void TouchCell(Vector3 position)
+    public void ColorCell(Vector3 position, Color color)
     {
         position = transform.InverseTransformPoint(position);
         HexCoordinates coordinates = HexCoordinates.FromPosition(position);
         int index = coordinates.X + coordinates.Z * width + coordinates.Z / 2;
         HexCell cell = cells[index];
-        cell.color = touchedColor;
+        cell.color = color;
         hexMesh.Triangulate(cells);
     }
 
@@ -79,6 +65,33 @@ public class HexGrid : MonoBehaviour
         cell.transform.localPosition = position;
         cell.coordinates = HexCoordinates.FromOffsetCoordinates(x, z);
         cell.color = defaultColor;
+
+        // Cell connections
+        if (x > 0)
+        {
+            cell.SetNeighbor(HexDirection.W, cells[i - 1]);
+        }
+        if (z > 0)
+        {
+            // Rows zig zag so we have to deal with odd/even rows differently
+            if ((z & 1)==0) // bitwise AND. even numbers have LSB=0
+            {
+                // Even rows
+                cell.SetNeighbor(HexDirection.SE, cells[i - width]);
+                if (x > 0)
+                {
+                    cell.SetNeighbor(HexDirection.SW, cells[i - width - 1]);
+                }
+            } else
+            {
+                // Odd rows
+                cell.SetNeighbor(HexDirection.SW, cells[i - width]);
+                if (x < width - 1)
+                {
+                    cell.SetNeighbor(HexDirection.SE, cells[i - width + 1]);
+                }
+            }
+        }
 
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.SetParent(gridCanvas.transform, false);
