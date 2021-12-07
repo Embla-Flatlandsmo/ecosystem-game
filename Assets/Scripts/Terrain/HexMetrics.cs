@@ -11,6 +11,8 @@ public static class HexMetrics
 
 	public const float blendFactor = 1f - solidFactor;
 
+	public const float elevationStep = 5f;
+
 	static Vector3[] corners = {
 		// This hexagon is orientated with point at the top
 		new Vector3(0f, 0f, outerRadius),
