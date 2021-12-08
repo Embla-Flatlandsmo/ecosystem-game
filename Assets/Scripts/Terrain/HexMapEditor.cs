@@ -10,6 +10,12 @@ public class HexMapEditor : MonoBehaviour
     private Color activeColor;
     private int activeElevation;
 
+    int brushSize;
+    public void SetBrushSize(float size)
+    {
+        brushSize = (int)size;
+    }
+
     bool applyColor;
     bool applyElevation = true;
 
@@ -39,19 +45,43 @@ public class HexMapEditor : MonoBehaviour
         RaycastHit hit;
         if (Physics.Raycast(inputRay, out hit))
         {
-            EditCell(hexGrid.GetCell(hit.point));
+            EditCells(hexGrid.GetCell(hit.point));
+        }
+    }
+
+    void EditCells(HexCell center)
+    {
+        int centerX = center.coordinates.X;
+        int centerZ = center.coordinates.Z;
+        for (int r = 0, z = centerZ - brushSize; z <= centerZ; z++, r++)
+        {
+            for (int x = centerX - r; x <= centerX + brushSize; x++)
+            {
+                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
+        }
+
+        for (int r = 0, z = centerZ + brushSize; z > centerZ; z--, r++)
+        {
+            for (int x = centerX - brushSize; x <= centerX + r; x++)
+            {
+                EditCell(hexGrid.GetCell(new HexCoordinates(x, z)));
+            }
         }
     }
 
     void EditCell(HexCell cell)
     {
-        if (applyColor)
+        if (cell)
         {
-            cell.Color = activeColor;
-        }
-        if (applyElevation)
-        {
-            cell.Elevation = activeElevation;
+            if (applyColor)
+            {
+                cell.Color = activeColor;
+            }
+            if (applyElevation)
+            {
+                cell.Elevation = activeElevation;
+            }
         }
     }
 

@@ -65,6 +65,21 @@ public class HexGrid : MonoBehaviour
         return cells[index];
     }
 
+    public HexCell GetCell(HexCoordinates coordinates)
+    {
+        int z = coordinates.Z;
+        if (z < 0 || z >= cellCountZ)
+        {
+            return null;
+        }
+        int x = coordinates.X + z / 2;
+        if (x < 0 || x >= cellCountX)
+        {
+            return null;
+        }
+        return cells[x + z * cellCountX];
+    }
+
     void CreateCell(int x, int z, int i)
     {
         Vector3 position;
