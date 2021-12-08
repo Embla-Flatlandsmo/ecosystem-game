@@ -10,6 +10,9 @@ public class HexMapEditor : MonoBehaviour
     private Color activeColor;
     private int activeElevation;
 
+    bool applyColor;
+    bool applyElevation = true;
+
     void Awake()
     {
         SelectColor(0);
@@ -42,17 +45,31 @@ public class HexMapEditor : MonoBehaviour
 
     void EditCell(HexCell cell)
     {
-        cell.Color = activeColor;
-        cell.Elevation = activeElevation;
+        if (applyColor)
+        {
+            cell.Color = activeColor;
+        }
+        if (applyElevation)
+        {
+            cell.Elevation = activeElevation;
+        }
     }
 
+    public void SetApplyElevation (bool toggle)
+    {
+        applyElevation = toggle;
+    }
     public void SetElevation(float elevation)
     {
         activeElevation = (int)elevation;
     }
     public void SelectColor(int index)
     {
-        activeColor = colors[index];
+        applyColor = index >= 0;
+        if (applyColor)
+        {
+            activeColor = colors[index];
+        }
     }
 
 
