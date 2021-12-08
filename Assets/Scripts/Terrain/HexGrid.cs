@@ -80,6 +80,14 @@ public class HexGrid : MonoBehaviour
         return cells[x + z * cellCountX];
     }
 
+    public void ShowUI(bool visible)
+    {
+        for (int i = 0; i < chunks.Length; i++)
+        {
+            chunks[i].ShowUI(visible);
+        }
+    }
+
     void CreateCell(int x, int z, int i)
     {
         Vector3 position;

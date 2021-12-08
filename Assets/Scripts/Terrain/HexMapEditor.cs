@@ -102,5 +102,10 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
+    public void ShowUI(bool visible)
+    {
+        hexGrid.ShowUI(visible);
+    }
+
 
 }
