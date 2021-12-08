@@ -311,6 +311,7 @@
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEditor.UI.ref.dll"
 -r:"Library/Bee/artifacts/1900b0aE.dag/UnityEngine.UI.ref.dll"
 "Assets/Scenes/SampleScene/SearchingAgent.cs"
+"Assets/Scripts/Camera/HexMapCamera.cs"
 "Assets/Scripts/Movement/RandomWalk.cs"
 "Assets/Scripts/Terrain/HexCell.cs"
 "Assets/Scripts/Terrain/HexCoordinates.cs"
