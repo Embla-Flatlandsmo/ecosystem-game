@@ -14,6 +14,7 @@ public static class ListPool<T>
     }
     public static void Add(List<T> list)
     {
+        // TODO: Understand how this works
         list.Clear();
         stack.Push(list);
     }
