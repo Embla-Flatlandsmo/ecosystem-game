@@ -15,6 +15,8 @@ public static class HexMetrics
 
 	public const int chunkSizeX = 5, chunkSizeZ = 5;
 
+	public const float waterElevationOffset = -0.5f;
+
 	static Vector3[] corners = {
 		// This hexagon is orientated with point at the top
 		new Vector3(0f, 0f, outerRadius),
