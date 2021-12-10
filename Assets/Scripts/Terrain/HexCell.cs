@@ -6,6 +6,13 @@ public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
 
+    public Vector3 Position
+    {
+        get
+        {
+            return transform.localPosition;
+        }
+    }
     public Color Color
     {
         get
