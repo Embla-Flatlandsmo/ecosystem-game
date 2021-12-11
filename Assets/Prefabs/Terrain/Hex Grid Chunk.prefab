@@ -295,6 +295,63 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!1 &4075828272866814509
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5859095744259137856}
+  - component: {fileID: 7474492458439625874}
+  m_Layer: 0
+  m_Name: Features
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5859095744259137856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4075828272866814509}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1834502479141987027}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7474492458439625874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4075828272866814509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2881db2da0660a48af8cb2d9ba3bebf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  treeCollections:
+  - prefabs:
+    - {fileID: 453611180655426405, guid: e9925550f2a9dbc45beeb2380ff00cfe, type: 3}
+  - prefabs:
+    - {fileID: 6391320587183137068, guid: 68eaed47601a93e48a58b42bd5bfdb3c, type: 3}
+  - prefabs:
+    - {fileID: 169723323678524243, guid: b8ebbd1d29a39d043ae29a5ff9013f6b, type: 3}
+  stoneCollections:
+  - prefabs:
+    - {fileID: -8679921383154817045, guid: 9640137857a01074a9fc1c5b711f8b38, type: 3}
+  - prefabs:
+    - {fileID: -8679921383154817045, guid: 339047a9f21d4c34e95a159fdeb817d8, type: 3}
+  - prefabs:
+    - {fileID: -8679921383154817045, guid: cce89adf635143a449d1134e3162b7d4, type: 3}
 --- !u!1 &4925565950059701317
 GameObject:
   m_ObjectHideFlags: 0
@@ -327,6 +384,7 @@ Transform:
   - {fileID: 8151702947494832940}
   - {fileID: 1052585423}
   - {fileID: 3627520770511359352}
+  - {fileID: 5859095744259137856}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -345,6 +403,7 @@ MonoBehaviour:
   terrain: {fileID: 3034530135010390546}
   water: {fileID: 1052585424}
   waterShore: {fileID: 5404146115960408086}
+  features: {fileID: 7474492458439625874}
 --- !u!1 &5058928933573444664
 GameObject:
   m_ObjectHideFlags: 0

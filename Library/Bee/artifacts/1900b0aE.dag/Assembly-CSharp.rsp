@@ -316,15 +316,15 @@
 "Assets/Scenes/SampleScene/SearchingAgent.cs"
 "Assets/Scripts/Camera/HexMapCamera.cs"
 "Assets/Scripts/Movement/RandomWalk.cs"
-"Assets/Scripts/Terrain/EdgeVertices.cs"
 "Assets/Scripts/Terrain/HexCell.cs"
 "Assets/Scripts/Terrain/HexCoordinates.cs"
-"Assets/Scripts/Terrain/HexDirection.cs"
+"Assets/Scripts/Terrain/HexFeatureManager.cs"
 "Assets/Scripts/Terrain/HexGrid.cs"
 "Assets/Scripts/Terrain/HexGridChunk.cs"
 "Assets/Scripts/Terrain/HexMapEditor.cs"
 "Assets/Scripts/Terrain/HexMesh.cs"
 "Assets/Scripts/Terrain/HexMetrics.cs"
+"Assets/Scripts/Terrain/HexUtils.cs"
 "Assets/Scripts/Utilities/ListPool.cs"
 -langversion:8.0
 

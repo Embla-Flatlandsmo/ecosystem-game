@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages cells inside a chunk
+/// </summary>
 public class HexGridChunk : MonoBehaviour
 {
     HexCell[] cells;
 
     public HexMesh terrain, water, waterShore;
+    public HexFeatureManager features;
     Canvas gridCanvas;
 
     void Awake()
@@ -46,6 +50,7 @@ public class HexGridChunk : MonoBehaviour
         terrain.Clear();
         water.Clear();
         waterShore.Clear();
+        features.Clear();
         for (int i = 0; i < cells.Length; i++)
         {
             Triangulate(cells[i]);
@@ -53,6 +58,7 @@ public class HexGridChunk : MonoBehaviour
         terrain.Apply();
         water.Apply();
         waterShore.Apply();
+        features.Apply();
     }
 
     void Triangulate(HexCell cell)
@@ -61,11 +67,18 @@ public class HexGridChunk : MonoBehaviour
         {
             Triangulate(dir, cell);
         }
+        if (!cell.IsUnderwater)
+        {
+            features.AddFeature(cell, cell.Position);
+        }
     }
 
     void Triangulate(HexDirection direction, HexCell cell)
     {
         Vector3 center = cell.transform.localPosition;
+        EdgeVertices e = new EdgeVertices(
+            center + HexMetrics.GetFirstSolidCorner(direction),
+            center + HexMetrics.GetSecondSolidCorner(direction));
         Vector3 v1 = center + HexMetrics.GetFirstSolidCorner(direction);
         Vector3 v2 = center + HexMetrics.GetSecondSolidCorner(direction);
         terrain.AddTriangle(center, v1, v2);
@@ -78,8 +91,10 @@ public class HexGridChunk : MonoBehaviour
         if (cell.IsUnderwater)
         {
             TriangulateWater(direction, cell, center);
+        } else
+        {
+            features.AddFeature(cell, (center + e.v1 + e.v5) * (1f / 3f));
         }
-
         if (direction == HexDirection.NE)
         {
             TriangulateConnection(direction, cell, v1, v2);
@@ -198,18 +213,4 @@ public class HexGridChunk : MonoBehaviour
     }
 
 
-}
-
-public struct EdgeVertices
-{
-    public Vector3 v1, v2, v3, v4, v5;
-
-    public EdgeVertices(Vector3 corner1, Vector3 corner2)
-    {
-        v1 = corner1;
-        v2 = Vector3.Lerp(corner1, corner2, 0.25f);
-        v3 = Vector3.Lerp(corner1, corner2, 0.5f);
-        v4 = Vector3.Lerp(corner1, corner2, 0.75f);
-        v5 = corner2;
-    }
 }

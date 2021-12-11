@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Stores information about each cell (color, elevation, etc)
+/// </summary>
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
@@ -90,6 +93,43 @@ public class HexCell : MonoBehaviour
         }
     }
 
+
+    int treeLevel;
+
+    public int TreeLevel
+    {
+        get
+        {
+            return treeLevel;
+        }
+        set
+        {
+            if (treeLevel != value)
+            {
+                treeLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+
+    int stoneLevel;
+
+    public int StoneLevel
+    {
+        get
+        {
+            return stoneLevel;
+        }
+        set
+        {
+            if (stoneLevel != value)
+            {
+                stoneLevel = value;
+                RefreshSelfOnly();
+            }
+        }
+    }
+
     public HexGridChunk chunk;
 
     public RectTransform uiRect;
@@ -106,6 +146,11 @@ public class HexCell : MonoBehaviour
     {
         neighbors[(int)direction] = cell;
         cell.neighbors[(int)direction.Opposite()] = this;
+    }
+
+    void RefreshSelfOnly()
+    {
+        chunk.Refresh();
     }
 
     void Refresh ()

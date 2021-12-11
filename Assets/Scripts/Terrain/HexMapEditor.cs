@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Makes it possible to edit the hex grid
+/// </summary>
 public class HexMapEditor : MonoBehaviour
 {
     public Color[] colors;
@@ -10,6 +13,7 @@ public class HexMapEditor : MonoBehaviour
     private Color activeColor;
     private int activeElevation;
     private int activeWaterLevel;
+    private int activeTreeLevel, activeStoneLevel;
 
     int brushSize;
     public void SetBrushSize(float size)
@@ -20,6 +24,7 @@ public class HexMapEditor : MonoBehaviour
     bool applyColor;
     bool applyElevation = true;
     bool applyWaterLevel = true;
+    bool applyTreeLevel, applyStoneLevel;
 
     void Awake()
     {
@@ -88,6 +93,14 @@ public class HexMapEditor : MonoBehaviour
             {
                 cell.WaterLevel = activeWaterLevel;
             }
+            if (applyTreeLevel)
+            {
+                cell.TreeLevel = activeTreeLevel;
+            }
+            if (applyStoneLevel)
+            {
+                cell.StoneLevel = activeStoneLevel;
+            }
         }
     }
 
@@ -119,6 +132,25 @@ public class HexMapEditor : MonoBehaviour
         }
     }
 
+    public void SetApplyTreeLevel(bool toggle)
+    {
+        applyTreeLevel = toggle;
+    }
+
+    public void SetTreeLevel(float level)
+    {
+        activeTreeLevel = (int)level;
+    }
+
+    public void SetApplyStoneLevel(bool toggle)
+    {
+        applyStoneLevel = toggle;
+    }
+
+    public void SetStoneLevel(float level)
+    {
+        activeStoneLevel = (int)level;
+    }
     public void ShowUI(bool visible)
     {
         hexGrid.ShowUI(visible);

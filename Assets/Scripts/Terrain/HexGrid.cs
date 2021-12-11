@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages the entire grid (cells inside chunks)
+/// </summary>
 public class HexGrid : MonoBehaviour
 {
     int cellCountX = 6;
@@ -17,7 +20,7 @@ public class HexGrid : MonoBehaviour
     public Text cellLabelPrefab;
 
     public HexGridChunk chunkPrefab;
-
+    public int seed = 0;
 
     HexGridChunk[] chunks;
     HexCell[] cells;
@@ -26,7 +29,7 @@ public class HexGrid : MonoBehaviour
     {
         cellCountX = chunkCountX * HexMetrics.chunkSizeX;
         cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
-
+        HexMetrics.InitializeHashGrid(seed);
         CreateChunks();
         CreateCells();
     }
