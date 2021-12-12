@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 /// <summary>
 /// Stores information about each cell (color, elevation, etc)
@@ -16,23 +17,31 @@ public class HexCell : MonoBehaviour
             return transform.localPosition;
         }
     }
+
+    int terrainTypeIndex;
     public Color Color
     {
         get
         {
-            return color;
+            return HexMetrics.colors[terrainTypeIndex];
+        }
+    }
+
+    public int TerrainTypeIndex
+    {
+        get
+        {
+            return terrainTypeIndex;
         }
         set
         {
-            if (color == value)
+            if (terrainTypeIndex != value)
             {
-                return;
+                terrainTypeIndex = value;
+                Refresh();
             }
-            color = value;
-            Refresh();
         }
     }
-    Color color;
 
     public int Elevation
     {
@@ -44,17 +53,11 @@ public class HexCell : MonoBehaviour
         {
             if (elevation == value)
             {
+
                 return;
             }
-            
             elevation = value;
-            Vector3 position = transform.localPosition;
-            position.y = value * HexMetrics.elevationStep;
-            transform.localPosition = position;
-
-            Vector3 uiPosition = uiRect.localPosition;
-            uiPosition.z = elevation * -HexMetrics.elevationStep;
-            uiRect.localPosition = uiPosition;
+            RefreshPosition();
             Refresh();
         }
     }
@@ -168,4 +171,35 @@ public class HexCell : MonoBehaviour
             }
         }
     }
+
+    void RefreshPosition()
+    {
+        Vector3 position = transform.localPosition;
+        position.y = elevation * HexMetrics.elevationStep;
+        transform.localPosition = position;
+
+        Vector3 uiPosition = uiRect.localPosition;
+        uiPosition.z = elevation * -HexMetrics.elevationStep;
+        uiRect.localPosition = uiPosition;
+    }
+
+    public void Save(BinaryWriter writer)
+    {
+        writer.Write((byte)terrainTypeIndex);
+        writer.Write((byte)elevation);
+        writer.Write((byte)waterLevel);
+        writer.Write((byte)treeLevel);
+        writer.Write((byte)stoneLevel);
+    }
+
+    public void Load(BinaryReader reader)
+    {
+        terrainTypeIndex = reader.ReadByte();
+        elevation = reader.ReadByte();
+        RefreshPosition();
+        waterLevel = reader.ReadByte();
+        treeLevel = reader.ReadByte();
+        stoneLevel = reader.ReadByte();
+    } 
 }
+
