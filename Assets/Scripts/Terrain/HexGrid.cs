@@ -10,9 +10,8 @@ using UnityEngine.UI;
 /// </summary>
 public class HexGrid : MonoBehaviour
 {
-    int cellCountX = 6;
-    int cellCountZ = 6;
-    public int chunkCountX = 4, chunkCountZ = 3;
+    public int cellCountX = 20, cellCountZ = 15;
+    public int chunkCountX, chunkCountZ;
 
     public Color[] colors;
 
@@ -27,12 +26,35 @@ public class HexGrid : MonoBehaviour
 
     void Awake()
     {
-        cellCountX = chunkCountX * HexMetrics.chunkSizeX;
-        cellCountZ = chunkCountZ * HexMetrics.chunkSizeZ;
+
         HexMetrics.InitializeHashGrid(seed);
         HexMetrics.colors = colors;
+        CreateMap(cellCountX, cellCountZ);
+    }
+
+    public bool CreateMap(int x, int z)
+    {
+        if ( x <= 0 || x % HexMetrics.chunkSizeX != 0 ||
+            z <= 0 || z % HexMetrics.chunkSizeZ != 0)
+        {
+            Debug.LogError("Unsupported map size. X,Z must be a multiple of " + HexMetrics.chunkSizeX + ", " + HexMetrics.chunkSizeZ);
+            return false;
+        }
+        if (chunks != null)
+        {
+            for (int i = 0; i < chunks.Length; i++)
+            {
+                Destroy(chunks[i].gameObject);
+            }
+        }
+        cellCountX = x;
+        cellCountZ = z;
+        chunkCountX = cellCountX / HexMetrics.chunkSizeX;
+        chunkCountZ = cellCountZ / HexMetrics.chunkSizeZ;
+
         CreateChunks();
         CreateCells();
+        return true;
     }
 
     void CreateCells()
@@ -152,6 +174,8 @@ public class HexGrid : MonoBehaviour
 
     public void Save(BinaryWriter writer)
     {
+        writer.Write(cellCountX);
+        writer.Write(cellCountZ);
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Save(writer);
@@ -160,6 +184,17 @@ public class HexGrid : MonoBehaviour
 
     public void Load(BinaryReader reader)
     {
+        int x = reader.ReadInt32();
+        int z = reader.ReadInt32();
+
+        if (x != cellCountX || z != cellCountZ)
+        {
+            if (!CreateMap(x, z))
+            {
+                return;
+            }
+        }
+
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Load(reader);

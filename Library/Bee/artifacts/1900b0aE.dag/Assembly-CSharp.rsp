@@ -321,10 +321,13 @@
 "Assets/Scripts/Terrain/HexFeatureManager.cs"
 "Assets/Scripts/Terrain/HexGrid.cs"
 "Assets/Scripts/Terrain/HexGridChunk.cs"
-"Assets/Scripts/Terrain/HexMapEditor.cs"
 "Assets/Scripts/Terrain/HexMesh.cs"
 "Assets/Scripts/Terrain/HexMetrics.cs"
 "Assets/Scripts/Terrain/HexUtils.cs"
+"Assets/Scripts/UI/HexMapEditor.cs"
+"Assets/Scripts/UI/NewMapMenu.cs"
+"Assets/Scripts/UI/SaveLoadItem.cs"
+"Assets/Scripts/UI/SaveLoadMenu.cs"
 "Assets/Scripts/Utilities/ListPool.cs"
 -langversion:8.0
 

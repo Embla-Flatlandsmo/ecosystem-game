@@ -79,7 +79,7 @@ public class HexCell : MonoBehaviour
             Refresh();
         }
     }
-    int waterLevel = int.MinValue;
+    int waterLevel = 1;
 
     public float WaterSurfaceY
     {
