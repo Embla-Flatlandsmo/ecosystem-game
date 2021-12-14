@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEngine.UI;
+
 
 /// <summary>
 /// Stores information about each cell (color, elevation, etc)
@@ -9,6 +11,8 @@ using System.IO;
 public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
+
+    public HexUnit Unit { get; set; }
 
     public Vector3 Position
     {
@@ -133,6 +137,21 @@ public class HexCell : MonoBehaviour
         }
     }
 
+
+    int distance;
+    public int Distance
+    {
+        get
+        {
+            return distance;
+        }
+        set
+        {
+            distance = value;
+            UpdateDistanceLabel();
+        }
+    }
+
     public HexGridChunk chunk;
 
     public RectTransform uiRect;
@@ -144,6 +163,16 @@ public class HexCell : MonoBehaviour
     {
         return neighbors[(int)direction];
     }
+    public HexEdgeType GetEdgeType(HexDirection direction)
+    {
+        return HexMetrics.GetEdgeType(elevation, neighbors[(int)direction].elevation);
+    }
+
+    public HexEdgeType GetEdgeType(HexCell otherCell)
+    {
+        return HexMetrics.GetEdgeType(elevation, otherCell.elevation);
+    }
+
 
     public void SetNeighbor(HexDirection direction, HexCell cell)
     {
@@ -154,6 +183,10 @@ public class HexCell : MonoBehaviour
     void RefreshSelfOnly()
     {
         chunk.Refresh();
+        if (Unit)
+        {
+            Unit.ValidateLocation();
+        }
     }
 
     void Refresh ()
@@ -168,6 +201,10 @@ public class HexCell : MonoBehaviour
                 {
                     neighbor.chunk.Refresh();
                 }
+            }
+            if (Unit)
+            {
+                Unit.ValidateLocation();
             }
         }
     }
@@ -201,5 +238,14 @@ public class HexCell : MonoBehaviour
         treeLevel = reader.ReadByte();
         stoneLevel = reader.ReadByte();
     } 
-}
 
+    void UpdateDistanceLabel()
+    {
+        Text label = uiRect.GetComponent<Text>();
+        label.text = distance == int.MaxValue ? "" : distance.ToString();
+    }
+}
+public enum HexEdgeType
+{
+    Flat, Slope, Cliff
+}

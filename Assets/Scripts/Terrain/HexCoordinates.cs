@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 [System.Serializable]
 public struct HexCoordinates
@@ -79,15 +80,27 @@ public struct HexCoordinates
         }
         return new HexCoordinates(iX, iZ);
     }
-    // Start is called before the first frame update
-    void Start()
+
+    public void Save(BinaryWriter writer)
     {
-        
+        writer.Write(x);
+        writer.Write(z);
     }
 
-    // Update is called once per frame
-    void Update()
+    public static HexCoordinates Load(BinaryReader reader)
     {
-        
+        HexCoordinates c;
+        c.x = reader.ReadInt32();
+        c.z = reader.ReadInt32();
+        return c;
     }
+
+    public int DistanceTo(HexCoordinates other)
+    {
+        return ((x < other.X ? other.x - x : x - other.x) +
+            (Y < other.Y ? other.Y - Y : Y - other.Y) +
+            (z < other.z ? other.z - z : z - other.z))/2;
+    }
+
+
 }

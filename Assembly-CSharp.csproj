@@ -61,19 +61,19 @@
     <Compile Include="Assets\Scripts\Terrain\HexMetrics.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexFeatureManager.cs" />
     <Compile Include="Assets\Scenes\SampleScene\SearchingAgent.cs" />
+    <Compile Include="Assets\Scripts\UI\SaveLoadItem.cs" />
     <Compile Include="Assets\Scripts\Utilities\ListPool.cs" />
     <Compile Include="Assets\Scripts\UI\NewMapMenu.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexGridChunk.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexCell.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexGrid.cs" />
     <Compile Include="Assets\Scripts\Terrain\HexCoordinates.cs" />
-    <Compile Include="Assets\Scripts\Movement\RandomWalk.cs" />
-    <Compile Include="Assets\Scripts\UI\SaveLoadItem.cs" />
+    <Compile Include="Assets\Scripts\Movement\HexUnit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Scripts\Shaders\Water.cginc" />
     <None Include="Assets\Scripts\Shaders\WaterShore.shader" />
-    <None Include="Assets\Scripts\Shaders\VertexColors.shader" />
+    <None Include="Assets\Scripts\Shaders\Terrain.shader" />
     <None Include="Assets\Scripts\Shaders\Water.shader" />
   </ItemGroup>
   <ItemGroup>

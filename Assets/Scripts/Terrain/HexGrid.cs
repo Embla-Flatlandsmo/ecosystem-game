@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Manages the entire grid (cells inside chunks)
+/// Manages the entire map/grid (cells inside chunks)
 /// </summary>
 public class HexGrid : MonoBehaviour
 {
@@ -23,12 +23,16 @@ public class HexGrid : MonoBehaviour
 
     HexGridChunk[] chunks;
     HexCell[] cells;
+    [System.NonSerialized] List<HexCell> frontier;
+    List<HexUnit> units = new List<HexUnit>();
+    public HexUnit unitPrefab;
 
     void Awake()
     {
 
         HexMetrics.InitializeHashGrid(seed);
         HexMetrics.colors = colors;
+        HexUnit.unitPrefab = unitPrefab;
         CreateMap(cellCountX, cellCountZ);
     }
 
@@ -40,6 +44,9 @@ public class HexGrid : MonoBehaviour
             Debug.LogError("Unsupported map size. X,Z must be a multiple of " + HexMetrics.chunkSizeX + ", " + HexMetrics.chunkSizeZ);
             return false;
         }
+
+        ClearUnits();
+
         if (chunks != null)
         {
             for (int i = 0; i < chunks.Length; i++)
@@ -154,7 +161,6 @@ public class HexGrid : MonoBehaviour
 
         Text label = Instantiate<Text>(cellLabelPrefab);
         label.rectTransform.anchoredPosition = new Vector2(position.x, position.z-HexMetrics.innerRadius*0.5f);
-        label.text = cell.coordinates.ToStringOnSeparateLines();
         cell.uiRect = label.rectTransform;
         cell.Elevation = 0;
 
@@ -180,10 +186,18 @@ public class HexGrid : MonoBehaviour
         {
             cells[i].Save(writer);
         }
+
+        writer.Write(units.Count);
+        for (int i = 0; i < units.Count; i++)
+        {
+            units[i].Save(writer);
+        }
     }
 
     public void Load(BinaryReader reader)
     {
+        ClearUnits();
+        StopAllCoroutines();
         int x = reader.ReadInt32();
         int z = reader.ReadInt32();
 
@@ -203,5 +217,86 @@ public class HexGrid : MonoBehaviour
         {
             chunks[i].Refresh();
         }
+
+        int unitCount = reader.ReadInt32();
+        for (int i = 0; i < unitCount; i++)
+        {
+            HexUnit.Load(reader, this);
+        }
+    }
+    public void FindDistancesTo(HexCell cell)
+    {
+        StopAllCoroutines();
+        StartCoroutine(Search(cell));
+    }
+
+    IEnumerator Search(HexCell cell)
+    {
+        for (int i = 0; i < cells.Length; i++)
+        {
+            cells[i].Distance = int.MaxValue;
+        }
+        WaitForSeconds delay = new WaitForSeconds(1 / 60f);
+        //Queue<HexCell> frontier = new Queue<HexCell>();
+        frontier = ListPool<HexCell>.Get();
+        cell.Distance = 0;
+        frontier.Add(cell);
+        //frontier.Enqueue(cell);
+        while (frontier.Count>0)
+        {
+            yield return delay;
+            HexCell current = frontier[0];
+            frontier.RemoveAt(0);
+            //HexCell current = frontier.Dequeue();
+            for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
+            {
+                HexCell neighbor = current.GetNeighbor(d);
+                if (neighbor == null || neighbor.Distance != int.MaxValue)
+                {
+                    continue;
+                }
+                if (neighbor.IsUnderwater)
+                {
+                    continue;
+                }
+                if (current.GetEdgeType(neighbor) == HexEdgeType.Cliff)
+                {
+                    continue;
+                }
+                neighbor.Distance = current.Distance + 1;
+                frontier.Add(neighbor);
+                //frontier.Enqueue(neighbor);
+            }
+        }
+        for (int i = 0; i < cells.Length; i++)
+        {
+            yield return delay;
+            cells[i].Distance =
+                cell.coordinates.DistanceTo(cells[i].coordinates);
+        }
+        ListPool<HexCell>.Add(frontier);
+    }
+
+    void ClearUnits()
+    {
+        for (int i = 0; i < units.Count; i++)
+        {
+            units[i].Die();
+        }
+        units.Clear();
+    }
+
+    public void AddUnit(HexUnit unit, HexCell location, float orientation)
+    {
+        units.Add(unit);
+        unit.transform.SetParent(transform, false);
+        unit.Location = location;
+        unit.Orientation = orientation;
+    }
+
+    public void RemoveUnit(HexUnit unit)
+    {
+        units.Remove(unit);
+        unit.Die();
     }
 }
