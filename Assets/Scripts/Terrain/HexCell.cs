@@ -12,6 +12,7 @@ public class HexCell : MonoBehaviour
 {
     public HexCoordinates coordinates;
 
+    public HexCell PathFrom { get; set; }
     public HexUnit Unit { get; set; }
 
     public Vector3 Position
@@ -239,6 +240,19 @@ public class HexCell : MonoBehaviour
         stoneLevel = reader.ReadByte();
     } 
 
+    public void DisableHighlight()
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+
+        highlight.enabled = false;
+    }
+
+    public void EnableHighlight(Color color)
+    {
+        Image highlight = uiRect.GetChild(0).GetComponent<Image>();
+        highlight.color = color;
+        highlight.enabled = true;
+    }
     void UpdateDistanceLabel()
     {
         Text label = uiRect.GetComponent<Text>();

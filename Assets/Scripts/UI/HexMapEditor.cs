@@ -16,6 +16,8 @@ public class HexMapEditor : MonoBehaviour
     private int activeTreeLevel, activeStoneLevel;
     private int activeTerrainTypeIndex;
 
+    HexCell previousCell, searchFromCell, searchToCell;
+
     public void SetTerrainTypeIndex(int index)
     {
         activeTerrainTypeIndex = index;
@@ -76,10 +78,29 @@ public class HexMapEditor : MonoBehaviour
         if (editMode)
         {
             EditCells(currentCell);
-        } else
-        {
-            hexGrid.FindDistancesTo(currentCell);
         }
+        else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
+        {
+            if (searchFromCell)
+            {
+                searchFromCell.DisableHighlight();
+            }
+            searchFromCell = currentCell;
+            searchFromCell.EnableHighlight(Color.blue);
+            if (searchToCell)
+            {
+                hexGrid.FindPath(searchFromCell, searchToCell);
+            }
+        }
+        else if (searchFromCell && searchFromCell != currentCell)
+        {
+            searchToCell = currentCell;
+            hexGrid.FindPath(searchFromCell, currentCell);
+        }
+        //else
+        //{
+        //    hexGrid.FindDistancesTo(currentCell);
+        //}
     }
 
     HexCell GetCellUnderCursor()

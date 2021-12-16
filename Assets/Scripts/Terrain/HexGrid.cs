@@ -224,30 +224,43 @@ public class HexGrid : MonoBehaviour
             HexUnit.Load(reader, this);
         }
     }
-    public void FindDistancesTo(HexCell cell)
+    public void FindPath(HexCell fromCell, HexCell toCell)
     {
         StopAllCoroutines();
-        StartCoroutine(Search(cell));
+        StartCoroutine(Search(fromCell, toCell));
     }
 
-    IEnumerator Search(HexCell cell)
+    IEnumerator Search(HexCell fromCell, HexCell toCell)
     {
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Distance = int.MaxValue;
+            cells[i].DisableHighlight();
         }
+        fromCell.EnableHighlight(Color.blue);
+        toCell.EnableHighlight(Color.red);
         WaitForSeconds delay = new WaitForSeconds(1 / 60f);
         //Queue<HexCell> frontier = new Queue<HexCell>();
         frontier = ListPool<HexCell>.Get();
-        cell.Distance = 0;
-        frontier.Add(cell);
+        fromCell.Distance = 0;
+        frontier.Add(fromCell);
         //frontier.Enqueue(cell);
         while (frontier.Count>0)
         {
             yield return delay;
             HexCell current = frontier[0];
             frontier.RemoveAt(0);
-            //HexCell current = frontier.Dequeue();
+            if (current == toCell)
+            {
+                current = current.PathFrom;
+                while (current != fromCell)
+                {
+                    current.EnableHighlight(Color.white);
+                    current = current.PathFrom;
+                }
+                break;
+            }
+
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
                 HexCell neighbor = current.GetNeighbor(d);
@@ -264,6 +277,7 @@ public class HexGrid : MonoBehaviour
                     continue;
                 }
                 neighbor.Distance = current.Distance + 1;
+                neighbor.PathFrom = current;
                 frontier.Add(neighbor);
                 //frontier.Enqueue(neighbor);
             }
@@ -272,7 +286,7 @@ public class HexGrid : MonoBehaviour
         {
             yield return delay;
             cells[i].Distance =
-                cell.coordinates.DistanceTo(cells[i].coordinates);
+                fromCell.coordinates.DistanceTo(cells[i].coordinates);
         }
         ListPool<HexCell>.Add(frontier);
     }
