@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637752392532104737
-    m_Hash: 3042208005
+      ticks: 637754290193721595
+    m_Hash: 356985750
   m_LockFileStatus:
     m_FilePath: C:/github-repos/ecosystem-game/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637752392741018829
-    m_Hash: 564942281
+      ticks: 637754290193731566
+    m_Hash: 2468561162
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:

@@ -197,7 +197,6 @@ public class HexGrid : MonoBehaviour
     public void Load(BinaryReader reader)
     {
         ClearUnits();
-        StopAllCoroutines();
         int x = reader.ReadInt32();
         int z = reader.ReadInt32();
 
@@ -226,38 +225,39 @@ public class HexGrid : MonoBehaviour
     }
     public void FindPath(HexCell fromCell, HexCell toCell)
     {
-        StopAllCoroutines();
-        StartCoroutine(Search(fromCell, toCell));
+        System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
+        sw.Start();
+        Search(fromCell, toCell);
+        sw.Stop();
+        Debug.Log(sw.ElapsedMilliseconds);  
     }
 
-    IEnumerator Search(HexCell fromCell, HexCell toCell)
+    void Search(HexCell fromCell, HexCell toCell)
     {
         for (int i = 0; i < cells.Length; i++)
         {
             cells[i].Distance = int.MaxValue;
+            cells[i].SetLabel(null);
             cells[i].DisableHighlight();
         }
         fromCell.EnableHighlight(Color.blue);
-        toCell.EnableHighlight(Color.red);
-        WaitForSeconds delay = new WaitForSeconds(1 / 60f);
-        //Queue<HexCell> frontier = new Queue<HexCell>();
+        
         frontier = ListPool<HexCell>.Get();
         fromCell.Distance = 0;
         frontier.Add(fromCell);
-        //frontier.Enqueue(cell);
         while (frontier.Count>0)
         {
-            yield return delay;
             HexCell current = frontier[0];
             frontier.RemoveAt(0);
             if (current == toCell)
             {
-                current = current.PathFrom;
                 while (current != fromCell)
                 {
                     current.EnableHighlight(Color.white);
+                    current.SetLabel(current.Distance.ToString());
                     current = current.PathFrom;
                 }
+                toCell.EnableHighlight(Color.red);
                 break;
             }
 
@@ -278,15 +278,9 @@ public class HexGrid : MonoBehaviour
                 }
                 neighbor.Distance = current.Distance + 1;
                 neighbor.PathFrom = current;
+                //neighbor.SetLabel(neighbor.Distance.ToString());
                 frontier.Add(neighbor);
-                //frontier.Enqueue(neighbor);
             }
-        }
-        for (int i = 0; i < cells.Length; i++)
-        {
-            yield return delay;
-            cells[i].Distance =
-                fromCell.coordinates.DistanceTo(cells[i].coordinates);
         }
         ListPool<HexCell>.Add(frontier);
     }

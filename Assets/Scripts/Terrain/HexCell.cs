@@ -149,7 +149,6 @@ public class HexCell : MonoBehaviour
         set
         {
             distance = value;
-            UpdateDistanceLabel();
         }
     }
 
@@ -253,10 +252,10 @@ public class HexCell : MonoBehaviour
         highlight.color = color;
         highlight.enabled = true;
     }
-    void UpdateDistanceLabel()
+    public void SetLabel(string text)
     {
-        Text label = uiRect.GetComponent<Text>();
-        label.text = distance == int.MaxValue ? "" : distance.ToString();
+        UnityEngine.UI.Text label = uiRect.GetComponent<Text>();
+        label.text = text;
     }
 }
 public enum HexEdgeType
