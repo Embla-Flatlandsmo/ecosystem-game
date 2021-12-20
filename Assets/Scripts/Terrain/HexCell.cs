@@ -13,6 +13,7 @@ public class HexCell : MonoBehaviour
     public HexCoordinates coordinates;
 
     public HexCell PathFrom { get; set; }
+    public int SearchPhase { get; set; }
     public HexUnit Unit { get; set; }
 
     public Vector3 Position

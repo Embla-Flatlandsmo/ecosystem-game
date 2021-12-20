@@ -21,6 +21,12 @@ public struct HexHash
 }
 
 
+public enum SearchPhase
+{
+    NOT_REACHED,
+    IN_FRONTIER,
+    BEHIND_FRONTIER
+}
 
 public enum HexDirection
 {
