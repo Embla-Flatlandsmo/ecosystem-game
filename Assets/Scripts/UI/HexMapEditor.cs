@@ -16,7 +16,7 @@ public class HexMapEditor : MonoBehaviour
     private int activeTreeLevel, activeStoneLevel;
     private int activeTerrainTypeIndex;
 
-    HexCell previousCell, searchFromCell, searchToCell;
+    HexCell previousCell;
 
     public void SetTerrainTypeIndex(int index)
     {
@@ -32,13 +32,11 @@ public class HexMapEditor : MonoBehaviour
     bool applyElevation = true;
     bool applyWaterLevel = true;
     bool applyTreeLevel, applyStoneLevel;
-    bool editMode;
-
-
 
     void Awake()
     {
         terrainMaterial.DisableKeyword("GRID_ON");
+        SetEditMode(false);
     }
 
     // Start is called before the first frame update
@@ -75,45 +73,20 @@ public class HexMapEditor : MonoBehaviour
     void HandleInput()
     {
         HexCell currentCell = GetCellUnderCursor();
-        if (editMode)
+        if (currentCell)
         {
             EditCells(currentCell);
-        }
-        else if (Input.GetKey(KeyCode.LeftShift) && searchToCell != currentCell)
+            previousCell = currentCell;
+        } else
         {
-            if (searchFromCell != currentCell)
-            {
-                if (searchFromCell)
-                {
-                    searchFromCell.DisableHighlight();
-                }
-                searchFromCell = currentCell;
-                searchFromCell.EnableHighlight(Color.blue);
-                if (searchToCell)
-                {
-                    hexGrid.FindPath(searchFromCell, searchToCell);
-                }
-            }
+            previousCell = null;
         }
-        else if (searchFromCell && searchFromCell != currentCell)
-        {
-            if (searchToCell != currentCell)
-            {
-                searchToCell = currentCell;
-                hexGrid.FindPath(searchFromCell, searchToCell);
-            }
-        }
+        
     }
 
     HexCell GetCellUnderCursor()
     {
-        Ray inputRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(inputRay, out hit))
-        {
-            return hexGrid.GetCell(hit.point);
-        }
-        return null;
+        return hexGrid.GetCell(Camera.main.ScreenPointToRay(Input.mousePosition));
     }
 
     void CreateUnit()
@@ -223,8 +196,7 @@ public class HexMapEditor : MonoBehaviour
 
     public void SetEditMode(bool toggle)
     {
-        editMode = toggle;
-        hexGrid.ShowUI(!toggle);
+        enabled = toggle;
     }
 
     public void ShowUI(bool visible)

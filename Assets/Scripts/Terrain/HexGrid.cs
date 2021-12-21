@@ -28,6 +28,14 @@ public class HexGrid : MonoBehaviour
     HexCell currentPathFrom, currentPathTo;
     bool currentPathExists;
 
+    public bool HasPath
+    {
+        get
+        {
+            return currentPathExists;
+        }
+    }
+
 
     List<HexUnit> units = new List<HexUnit>();
     public HexUnit unitPrefab;
@@ -266,7 +274,7 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
-                if (neighbor.IsUnderwater)
+                if (neighbor.IsUnderwater || neighbor.Unit)
                 {
                     continue;
                 }
@@ -304,7 +312,7 @@ public class HexGrid : MonoBehaviour
         currentPathTo.EnableHighlight(Color.red);
     }
 
-    void ClearPath()
+    public void ClearPath()
     {
         if (currentPathExists)
         {
@@ -346,5 +354,15 @@ public class HexGrid : MonoBehaviour
     {
         units.Remove(unit);
         unit.Die();
+    }
+
+    public HexCell GetCell (Ray ray)
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            return GetCell(hit.point);
+        }
+        return null;
     }
 }
