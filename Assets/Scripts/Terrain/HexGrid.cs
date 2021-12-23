@@ -237,20 +237,20 @@ public class HexGrid : MonoBehaviour
             HexUnit.Load(reader, this);
         }
     }
-    public void FindPath(HexCell fromCell, HexCell toCell)
+    public void FindPath(HexCell fromCell, HexCell toCell, int speed)
     {
         //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
         //sw.Start();
         ClearPath();
         currentPathFrom = fromCell;
         currentPathTo = toCell;
-        currentPathExists = Search(fromCell, toCell);
-        ShowPath();
+        currentPathExists = Search(fromCell, toCell, speed);
+        ShowPath(speed);
         //sw.Stop();
         //Debug.Log(sw.ElapsedMilliseconds);  
     }
 
-    bool Search(HexCell fromCell, HexCell toCell)
+    bool Search(HexCell fromCell, HexCell toCell, int speed)
     {
         searchFrontierPhase += (int)SearchPhase.BEHIND_FRONTIER;
         
@@ -267,8 +267,11 @@ public class HexGrid : MonoBehaviour
                 return true;
             }
 
+            int currentTurn = (current.Distance - 1) / speed;
+
             for (HexDirection d = HexDirection.NE; d <= HexDirection.NW; d++)
             {
+                int moveCost = 1;
                 HexCell neighbor = current.GetNeighbor(d);
                 if (neighbor == null || neighbor.SearchPhase > searchFrontierPhase)
                 {
@@ -282,13 +285,21 @@ public class HexGrid : MonoBehaviour
                 {
                     continue;
                 }
+
+                int distance = current.Distance + moveCost;
+                int turn = (distance - 1) / speed;
+                if (turn > currentTurn)
+                {
+                    distance = turn * speed + moveCost;
+                }
                 if (neighbor.SearchPhase < searchFrontierPhase)
                 {
-                    neighbor.Distance = current.Distance + 1;
+                    neighbor.Distance = distance;
                     neighbor.PathFrom = current;
                     neighbor.SearchPhase = searchFrontierPhase;
                     frontier.Add(neighbor);
                 }
+                
 
             }
         }
@@ -296,14 +307,15 @@ public class HexGrid : MonoBehaviour
         return false;
     }
     
-    void ShowPath()
+    void ShowPath(int speed)
     {
         if (currentPathExists)
         {
             HexCell current = currentPathTo;
             while (current != currentPathFrom)
             {
-                current.SetLabel(current.Distance.ToString());
+                int turn = (current.Distance - 1) / speed;
+                current.SetLabel(turn.ToString());
                 current.EnableHighlight(Color.white);
                 current = current.PathFrom;
             }
@@ -364,5 +376,21 @@ public class HexGrid : MonoBehaviour
             return GetCell(hit.point);
         }
         return null;
+    }
+
+    public List<HexCell> GetPath()
+    {
+        if (!currentPathExists)
+        {
+            return null;
+        }
+        List<HexCell> path = ListPool<HexCell>.Get();
+        for (HexCell c = currentPathTo; c != currentPathFrom; c = c.PathFrom)
+        {
+            path.Add(c);
+        }
+        path.Add(currentPathFrom); //Includes starting cell
+        path.Reverse();
+        return path;
     }
 }
